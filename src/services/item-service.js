@@ -1,4 +1,5 @@
 const { ItemRepository } = require("../repository/index");
+const { replaceTrimLower } = require("../utils/helper-function");
 const { ServiceError, AppError } = require("../utils/index");
 
 class ItemService {
@@ -52,7 +53,7 @@ class ItemService {
     async getAll(data) {
         try {
             if (data.name) {
-                const NAME = data.name.replace(/\s+/g, ' ').trim().toUpperCase();
+                const NAME = replaceTrimLower(data.name);
                 const objs = await this.itemRepository.getAll();
 
                 if (!data.name) {
