@@ -1,7 +1,7 @@
 const Cart = require("../models/cart");
 
 class CartRepository {
-    async create(userId) {
+    async create() {
         try {
             const cart = await Cart.create({});
             console.log(cart);

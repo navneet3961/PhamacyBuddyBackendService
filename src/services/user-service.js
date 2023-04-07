@@ -78,6 +78,22 @@ class UserService {
 
     async update(userId, data) {
         try {
+            // If data has addressId that means new address is added to the database for the user
+            if (data.addressId) {
+                const user = await this.userRepository.get(userId);
+
+                // Finding all the addresses
+                let newListOfAddresses = user.addresses;
+
+                // Adding new addressId to the list
+                newListOfAddresses.push(data.addressId);
+
+                const newUser = await this.userRepository.update(userId, { addresses: newListOfAddresses });
+
+                return newUser;
+            }
+
+            // Else some other data about the user is need to be updated
             let requiredData = {};
             if (data.name) { requiredData.name = data.name; }
             if (data.email) { requiredData.email = data.email; }
@@ -100,7 +116,8 @@ class UserService {
             // First check if email matches the regex format or not.
             // Then get user by email.
             // If not found then the repository will through an error.
-            // If found then we will check if password provided and password assosciated with email matches or not using bcrypt
+            // If found then check if user is blocked or not. If blocked then throw error.
+            // Now check if password provided and password assosciated with email matches or not using bcrypt
             // If matches then we will return a jsonwebtoken
             // Else throw an error that password doesn't matches
 
@@ -114,6 +131,11 @@ class UserService {
             }
 
             const obj = await this.userRepository.getByEmail(email);
+
+            if (obj.isBlocked) {
+                throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
+            }
+
             const encryptedPassword = obj.password;
             const valid = bcrypt.compareSync(userPassword, encryptedPassword);
 

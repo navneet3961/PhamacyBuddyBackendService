@@ -62,7 +62,7 @@ class UserRepository {
 
     async get(userId) {
         try {
-            const obj = await User.findById(userId);
+            const obj = await User.findById(userId).populate({ path: "addresses" });
 
             if (!obj) {
                 throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
@@ -94,7 +94,7 @@ class UserRepository {
 
     async getAll(data) {
         try {
-            const obj = await User.find(data);
+            const obj = await User.find(data).populate({ path: "addresses" });
             return obj;
         } catch (error) {
             console.log("Name ", error.name);
@@ -105,12 +105,10 @@ class UserRepository {
 
     async update(userId, data) {
         try {
-
             const obj = await User.findByIdAndUpdate(userId, data, { runValidators: true, new: true });
             if (!obj) {
                 throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
             }
-            console.log(obj);
             return obj;
         } catch (error) {
             console.log("Name ", error.name);

@@ -57,7 +57,7 @@ class CartService {
             // Else it is a string them removing that item from the cart
             if (Array.isArray(data)) {
                 data.forEach((item) => {
-                    newListOfItems.add(item);
+                    newListOfItems.push(item);
                 });
             }
             else {

@@ -70,11 +70,13 @@ userSchema.pre("save", function (next) {
 });
 
 userSchema.pre("findOneAndUpdate", function () {
-    if (!this._update.password.match(passwordRegex)) {
-        throw new AppError("ClientError", "Invalid password format", "Please provide valid password.\nA valid password must have:\n\tAtleast one uppercase letter\n\tAtleast one lowercase letter\n\tAtleast one special character\n\tAtleast one numeric character\n\tAnd it must be from 8-12 characters long");
-    }
+    if (this._update.password) {
+        if (!this._update.password.match(passwordRegex)) {
+            throw new AppError("ClientError", "Invalid password format", "Please provide valid password.\nA valid password must have:\n\tAtleast one uppercase letter\n\tAtleast one lowercase letter\n\tAtleast one special character\n\tAtleast one numeric character\n\tAnd it must be from 8-12 characters long");
+        }
 
-    this._update.password = getEncryptedPassword(this._update.password);
+        this._update.password = getEncryptedPassword(this._update.password);
+    }
 });
 
 const User = mongoose.model('User', userSchema);
