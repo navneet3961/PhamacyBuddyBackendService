@@ -101,11 +101,23 @@ class UserService {
             if (data.isBlocked) { requiredData.stock = data.stock; }
 
             const obj = await this.userRepository.update(userId, requiredData);
+            const token = jwt.sign({ email: obj.email, id: obj.id, isAdmin: obj.isAdmin, cart: obj.cart }, JWTKEY);
+
+            if (data.email) {
+                obj.headers = {
+                    "x-access-token": token,
+                };
+            }
 
             return obj;
         } catch (error) {
-            if (error.name == "ValidationError" || error.name == "AttributeError" || error.name == "ClientError")
+            if (error.name == "JsonWebTokenError") {
+                throw new AppError(error.name, error.message, "Something went wrong in the token generation");
+            }
+
+            if (error.name == "ValidationError" || error.name == "AttributeError" || error.name == "ClientError") {
                 throw error;
+            }
 
             throw new ServiceError();
         }
@@ -145,7 +157,7 @@ class UserService {
                 })
             }
 
-            const token = jwt.sign({ email: obj.email, id: obj.id }, JWTKEY);
+            const token = jwt.sign({ email: obj.email, id: obj.id, isAdmin: obj.isAdmin, cart: obj.cart }, JWTKEY);
 
             return {
                 headers: {
@@ -173,6 +185,10 @@ class UserService {
 
             const userData = jwt.verify(userToken, JWTKEY);
             const obj = await this.userRepository.getByEmail(userData.email);
+
+            if (obj.isBlocked) {
+                throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
+            }
 
             return obj;
         } catch (error) {
