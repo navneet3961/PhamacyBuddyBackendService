@@ -4,7 +4,6 @@ class CartRepository {
     async create() {
         try {
             const cart = await Cart.create({});
-            console.log(cart);
             return cart;
         } catch (error) {
             console.log("Name ", error.name);

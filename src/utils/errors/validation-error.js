@@ -1,10 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
 
 class ValidationError extends Error {
-    constructor(explanation) {
+    constructor(message = 'Not able to validate the data sent in the request', explanation) {
         super();
         this.name = 'ValidationError';
-        this.message = 'Not able to validate the data sent in the request';
+        this.message = message;
         this.explanation = explanation;
         this.statusCode = StatusCodes.BAD_REQUEST;
     }

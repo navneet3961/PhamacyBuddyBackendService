@@ -57,14 +57,25 @@ class CartService {
             // Else it is a string them removing that item from the cart
             if (Array.isArray(data)) {
                 data.forEach((item) => {
-                    newListOfItems.push(item);
+                    let found = -1;
+                    for (let i = 0; i < newListOfItems.length; i++) {
+                        if (newListOfItems[i].itemId.toString() == item.itemId) {
+                            found = i;
+                            break;
+                        }
+                    }
+
+                    if (found == -1)
+                        newListOfItems.push(item);
+                    else
+                        newListOfItems[found].quantity += 1;
                 });
             }
             else {
                 const item = data;
 
                 for (let i = 0; i < newListOfItems.length; i++) {
-                    if (newListOfItems[i]._id.toString() == item) {
+                    if (newListOfItems[i].itemId.toString() == item) {
                         newListOfItems.splice(i, 1);
                         break;
                     }

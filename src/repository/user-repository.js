@@ -1,3 +1,4 @@
+const CartRepository = require("./cart-repository");
 const User = require("../models/user");
 const { AppError, ValidationError } = require("../utils/index");
 
@@ -19,10 +20,17 @@ class UserRepository {
         return errors;
     }
 
+    async #addCartToUser(user) {
+        const cartRepository = new CartRepository();
+        const cart = await cartRepository.create();
+
+        return await this.update(user._id, { "cart": cart._id });
+    }
+
     async create(data) {
         try {
             const obj = await User.create(data);
-            return obj;
+            return await this.#addCartToUser(obj);
         } catch (error) {
             console.log("Name ", error.name);
             console.log(error);

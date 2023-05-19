@@ -87,8 +87,23 @@ const validateSignIn = (req, res, next) => {
     next();
 }
 
+const validateToken = (req, res, next) => {
+    const token = req.headers["x-access-token"];
+
+    if (!token) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            status: false,
+            message: "Missing token",
+            explanation: "No token found in the request to validate the token",
+        });
+    }
+
+    next();
+}
+
 module.exports = {
     validateCreate,
     validateUpdate,
     validateSignIn,
+    validateToken,
 }

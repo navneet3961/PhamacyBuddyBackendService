@@ -5,7 +5,7 @@ const UserMiddleware = require("../../middlewares/user-middleware");
 
 router.post("/signup", UserMiddleware.validateCreate, UserController.create);
 router.post("/signin", UserMiddleware.validateSignIn, UserController.signIn);
-router.post("/", UserController.verifyToken);
+router.post("/isValidToken", UserMiddleware.validateToken, UserController.verifyToken);
 router.delete("/:id", UserController.destroy);
 router.get("/:id", UserController.get);
 router.get("/", UserController.getAll);

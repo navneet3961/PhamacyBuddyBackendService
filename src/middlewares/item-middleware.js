@@ -1,7 +1,10 @@
 const { StatusCodes } = require("http-status-codes");
+const jwt = require("jsonwebtoken");
+const { JWTKEY } = require("../config/serverConfig");
+const { UserRepository } = require("../repository");
 
 const validateCreate = (req, res, next) => {
-    const { name, description, image, price, stock } = req.body;
+    const { name, description, imageUrl, price, quantity } = req.body;
     let emptyFields = [];
 
     if (!name) {
@@ -12,16 +15,16 @@ const validateCreate = (req, res, next) => {
         emptyFields.push("description");
     }
 
-    if (!image) {
-        emptyFields.push("image");
+    if (!imageUrl) {
+        emptyFields.push("imageUrl");
     }
 
     if (!price) {
         emptyFields.push("price");
     }
 
-    if (!stock) {
-        emptyFields.push("stock");
+    if (!quantity) {
+        emptyFields.push("quantity");
     }
 
     if (emptyFields.length > 0) {
@@ -37,7 +40,7 @@ const validateCreate = (req, res, next) => {
 }
 
 const validateUpdate = (req, res, next) => {
-    const { name, description, image, price, stock } = req.body;
+    const { name, description, imageUrl, price, quantity } = req.body;
     let fields = [];
 
     if (name) {
@@ -48,16 +51,16 @@ const validateUpdate = (req, res, next) => {
         fields.push("description");
     }
 
-    if (image) {
-        fields.push("image");
+    if (imageUrl) {
+        fields.push("imageUrl");
     }
 
     if (price) {
         fields.push("price");
     }
 
-    if (stock) {
-        fields.push("stock");
+    if (quantity) {
+        fields.push("quantity");
     }
 
     if (fields.length == 0) {

@@ -13,8 +13,8 @@ class ItemService {
             requiredData.name = data.name;
             requiredData.description = data.description;
             requiredData.price = data.price;
-            requiredData.stock = data.stock;
-            requiredData.image = data.image;
+            requiredData.quantity = data.quantity;
+            requiredData.imageUrl = data.imageUrl;
 
             const obj = await this.itemRepository.create(requiredData);
             return obj;
@@ -63,13 +63,13 @@ class ItemService {
                 let result = [];
 
                 objs.forEach((obj) => {
-                    if (obj.name.includes(NAME)) {
+                    if (obj.name.toLowerCase().includes(NAME)) {
                         result.push(obj);
                     }
                 })
 
                 if (result.length == 0) {
-                    throw new AppError("ClientError", "Invalid Name", "No data found");
+                    throw new AppError("ClientError", "No items found", "Invalid name");
                 }
 
                 return result;
@@ -92,8 +92,8 @@ class ItemService {
             if (data.name) { requiredData.name = data.name; }
             if (data.description) { requiredData.description = data.description; }
             if (data.price) { requiredData.price = data.price; }
-            if (data.stock) { requiredData.stock = data.stock; }
-            if (data.image) { requiredData.image = data.image; }
+            if (data.quantity) { requiredData.quantity = data.quantity; }
+            if (data.imageUrl) { requiredData.imageUrl = data.imageUrl; }
 
             const obj = await this.itemRepository.update(itemId, requiredData);
             return obj;

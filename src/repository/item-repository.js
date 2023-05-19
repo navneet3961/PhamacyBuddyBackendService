@@ -21,17 +21,17 @@ class ItemRepository {
             errors.description = error.errors.description.message;
         }
 
-        if (error.errors.stock) {
-            if (error.errors.stock.name == "CastError") {
-                errors.stock = "Stock must be a number";
+        if (error.errors.quantity) {
+            if (error.errors.quantity.name == "CastError") {
+                errors.quantity = "quantity must be a number";
             }
             else {
-                errors.stock = error.errors.stock.message;
+                errors.quantity = error.errors.quantity.message;
             }
         }
 
-        if (error.errors.image) {
-            errors.image = error.errors.image.message;
+        if (error.errors.imageUrl) {
+            errors.imageUrl = error.errors.imageUrl.message;
         }
 
         return errors;
@@ -109,8 +109,8 @@ class ItemRepository {
                     throw new ValidationError({ "price": "Price must be a number" });
                 }
 
-                if (error.path == "stock") {
-                    throw new ValidationError({ "stock": "Stock must be a number" });
+                if (error.path == "quantity") {
+                    throw new ValidationError({ "quantity": "quantity must be a number" });
                 }
             }
 

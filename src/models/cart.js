@@ -4,17 +4,22 @@ const cartSchema = new mongoose.Schema({
     items: [
         {
             itemId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Item',
-            }
+                type: String,
+                req: true,
+            },
+            quantity: {
+                type: Number,
+                require: true,
+            },
+            _id: false,
         }
     ]
 }, { timestamps: true });
 
 cartSchema.virtual('listOfItems', {
     ref: 'Item',
-    localField: 'items._id',
-    foreignField: '_id'
+    localField: 'items.itemId',
+    foreignField: '_id',
 });
 
 cartSchema.set('toJSON', { virtuals: true });

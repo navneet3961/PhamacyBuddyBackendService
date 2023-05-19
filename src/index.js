@@ -3,11 +3,13 @@ const bodyParser = require("body-parser");
 const { PORT } = require("./config/serverConfig");
 const connect = require("./config/database");
 const apiRoutes = require("./routes/index");
+const cors = require("cors");
 
 const setupAndStartServer = async () => {
     const app = new express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(cors());
     app.use("/api", apiRoutes);
 
     app.listen(PORT, async () => {

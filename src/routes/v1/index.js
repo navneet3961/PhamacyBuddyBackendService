@@ -4,10 +4,11 @@ const UserRoute = require("./user-route");
 const CartRoute = require("./cart-route");
 const AddressRoute = require("./address-route");
 const router = express.Router();
+const { ValidationMiddleware } = require("../../middlewares/index");
 
 router.use("/item", ItemRoute);
 router.use("/user", UserRoute);
-router.use("/cart", CartRoute);
+router.use("/cart", ValidationMiddleware.validUser, CartRoute);
 router.use("/address", AddressRoute);
 
 module.exports = router;

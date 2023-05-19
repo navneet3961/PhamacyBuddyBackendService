@@ -8,7 +8,6 @@ const itemSchema = new mongoose.Schema({
         required: [true, "Name is required"],
         index: true,
         unique: [true, "Name already exists"],
-        uppercase: true,
         trim: true,
         minLength: [3, "Name cannot be less than 3 characters"],
     },
@@ -20,7 +19,7 @@ const itemSchema = new mongoose.Schema({
         trim: true,
         maxLength: [250, "Description cannot be more than 250 characters"],
     },
-    image: {
+    imageUrl: {
         type: String,
         required: [true, "Image is required"],
     },
@@ -29,10 +28,10 @@ const itemSchema = new mongoose.Schema({
         min: [0, "Price cannot be negative"],
         required: [true, "Price is required"],
     },
-    stock: {
+    quantity: {
         type: Number,
-        min: [0, "Stock cannot be negative"],
-        required: [true, "Stock is required"],
+        min: [0, "Quantity cannot be negative"],
+        required: [true, "Quantity is required"],
     }
 }, { timestamps: true });
 

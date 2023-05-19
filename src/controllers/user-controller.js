@@ -76,6 +76,23 @@ const getAll = async (req, res) => {
 const update = async (req, res) => {
     try {
         const response = await userService.update(req.params.id, req.body);
+
+        if (req.body.email) {
+            res.writeHead(200, {
+                "x-access-token": response.token,
+                "Content-Type": "application/json",
+                "Access-Control-Expose-Headers": "*",
+            });
+
+            delete response.token;
+
+            return res.end(JSON.stringify({
+                status: true,
+                data: response,
+                message: "User data updated succesfully"
+            }));
+        }
+
         return res.status(201).json({
             status: true,
             data: response,
@@ -94,11 +111,20 @@ const update = async (req, res) => {
 const signIn = async (req, res) => {
     try {
         const response = await userService.signIn(req.body.email, req.body.password);
-        return res.status(200).json({
+
+        res.writeHead(200, {
+            "x-access-token": response.token,
+            "Content-Type": "application/json",
+            "Access-Control-Expose-Headers": "*",
+        });
+
+        delete response.token;
+
+        return res.end(JSON.stringify({
             status: true,
             data: response,
             message: "User SignedIn Succesfully"
-        });
+        }));
     } catch (error) {
         return res.status(error.statusCode).json({
             status: false,

@@ -104,9 +104,7 @@ class UserService {
             const token = jwt.sign({ email: obj.email, id: obj.id, isAdmin: obj.isAdmin, cart: obj.cart }, JWTKEY);
 
             if (data.email) {
-                obj.headers = {
-                    "x-access-token": token,
-                };
+                obj.token = token;
             }
 
             return obj;
@@ -152,18 +150,17 @@ class UserService {
             const valid = bcrypt.compareSync(userPassword, encryptedPassword);
 
             if (!valid) {
-                throw new ValidationError({
-                    "password": "Password doesn't matches."
-                })
+                throw new ValidationError(
+                    "Invalid password or email",
+                    "Password doesn't matches"
+                )
             }
 
-            const token = jwt.sign({ email: obj.email, id: obj.id, isAdmin: obj.isAdmin, cart: obj.cart }, JWTKEY);
+            const token = jwt.sign({ email: obj.email, id: obj.id, isAdmin: obj.isAdmin, cart: obj.cart }, JWTKEY, { expiresIn: '30d' });
 
-            return {
-                headers: {
-                    "x-access-token": token,
-                }
-            };
+            obj.token = token;
+
+            return obj;
         } catch (error) {
             if (error.name == "JsonWebTokenError") {
                 throw new AppError(error.name, error.message, "Something went wrong in the token generation");
