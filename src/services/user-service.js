@@ -93,6 +93,21 @@ class UserService {
                 return newUser;
             }
 
+            // If data has orderId that means new order is added to the database for the user
+            if (data.orderId) {
+                const user = await this.userRepository.get(userId);
+
+                // Finding all the orders
+                let newListOfOrders = user.orders;
+
+                // Adding new orderId to the list
+                newListOfOrders.push(data.orderId);
+
+                const newUser = await this.userRepository.update(userId, { orders: newListOfOrders });
+
+                return newUser;
+            }
+
             // Else some other data about the user is need to be updated
             let requiredData = {};
             if (data.name) { requiredData.name = data.name; }
@@ -135,9 +150,9 @@ class UserService {
             const isValidEmail = email.match(emailRegex);
 
             if (!isValidEmail) {
-                throw new ValidationError({
-                    "email": "Invalid email format"
-                })
+                throw new ValidationError(
+                    "Invalid email format"
+                )
             }
 
             const obj = await this.userRepository.getByEmail(email);

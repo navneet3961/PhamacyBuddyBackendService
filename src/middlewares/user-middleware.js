@@ -29,7 +29,7 @@ const validateCreate = (req, res, next) => {
 }
 
 const validateUpdate = (req, res, next) => {
-    const { name, email, password, isBlocked, addressId } = req.body;
+    const { name, email, password, isBlocked, addressId, orderId } = req.body;
     let fields = [];
 
     if (name) {
@@ -50,6 +50,10 @@ const validateUpdate = (req, res, next) => {
 
     if (addressId) {
         fields.push("addressId");
+    }
+
+    if (orderId) {
+        fields.push("orderId");
     }
 
     if (fields.length == 0) {

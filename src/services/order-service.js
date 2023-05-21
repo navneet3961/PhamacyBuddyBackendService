@@ -1,22 +1,15 @@
-const { AddressRepository } = require("../repository/index");
+const { OrderRepository } = require("../repository/index");
 const { ServiceError } = require("../utils");
 
-class AddressService {
+class OrderService {
     constructor() {
-        this.addressRepository = new AddressRepository();
+        this.orderRepository = new OrderRepository();
     }
 
     async create(data) {
         try {
-            let requiredData = {};
-            requiredData.addressLine = data.addressLine;
-            requiredData.city = data.city;
-            requiredData.state = data.state;
-            requiredData.pincode = data.pincode;
-
-            const address = await this.addressRepository.create(requiredData);
-
-            return address;
+            const order = await this.orderRepository.create(data.items, data.totalCost, data.address, data.phone);
+            return order;
         } catch (error) {
             console.log("In Service Layer Name ", error.name);
             console.log(error);
@@ -29,14 +22,13 @@ class AddressService {
         }
     }
 
-    async delete(addressId) {
+    async delete(orderId) {
         try {
-            const address = await this.addressRepository.delete(addressId);
+            await this.orderRepository.delete(orderId);
             return true;
         } catch (error) {
             console.log("In Service Layer Name ", error.name);
             console.log(error);
-
             if (error.name == "ClientError") {
                 throw error;
             }
@@ -45,10 +37,25 @@ class AddressService {
         }
     }
 
-    async get(addressId) {
+    async get(orderId) {
         try {
-            const address = await this.addressRepository.get(addressId);
-            return address;
+            const order = await this.orderRepository.get(orderId);
+            return order;
+        } catch (error) {
+            console.log("In Service Layer Name ", error.name);
+            console.log(error);
+            if (error.name == "ClientError") {
+                throw error;
+            }
+
+            throw new ServiceError();
+        }
+    }
+
+    async update(orderId, data) {
+        try {
+            const order = await this.orderRepository.update(orderId, data.status);
+            return order;
         } catch (error) {
             console.log("In Service Layer Name ", error.name);
             console.log(error);
@@ -62,4 +69,4 @@ class AddressService {
     }
 }
 
-module.exports = AddressService;
+module.exports = OrderService;

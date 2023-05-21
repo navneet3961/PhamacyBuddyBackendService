@@ -3,21 +3,21 @@ const { ValidationError } = require("../utils");
 
 class AddressRepository {
     #findErrorAttributes(error) {
-        let errors = {};
+        let errors = "";
         if (error.errors.addressLine) {
-            errors.addressLine = error.errors.addressLine.message;
+            errors += error.errors.addressLine.message + " ";
         }
 
         if (error.errors.city) {
-            errors.city = error.errors.city.message;
+            errors += error.errors.city.message + " ";
         }
 
         if (error.errors.state) {
-            errors.state = error.errors.state.message;
+            errors += error.errors.state.message + " ";
         }
 
         if (error.errors.pincode) {
-            errors.pincode = error.errors.pincode.message;
+            errors += error.errors.pincode.message + " ";
         }
 
         return errors;
@@ -26,7 +26,6 @@ class AddressRepository {
     async create(data) {
         try {
             const address = await Address.create(data);
-            console.log(address);
             return address;
         } catch (error) {
             console.log("Name ", error.name);

@@ -3,35 +3,35 @@ const { AppError, ValidationError } = require("../utils/index");
 
 class ItemRepository {
     #findErrorAttributes(error) {
-        let errors = {};
+        let errors = "";
         if (error.errors.name) {
-            errors.name = error.errors.name.message;
+            errors += error.errors.name.message + " ";
         }
 
         if (error.errors.price) {
             if (error.errors.price.name == "CastError") {
-                errors.price = "Price must be a number";
+                errors += "Price must be a number ";
             }
             else {
-                errors.price = error.errors.price.message;
+                errors += error.errors.price.message + " ";
             }
         }
 
         if (error.errors.description) {
-            errors.description = error.errors.description.message;
+            errors += error.errors.description.messag + " ";
         }
 
         if (error.errors.quantity) {
             if (error.errors.quantity.name == "CastError") {
-                errors.quantity = "quantity must be a number";
+                errors += "quantity must be a number ";
             }
             else {
-                errors.quantity = error.errors.quantity.message;
+                errors += error.errors.quantity.message + " ";
             }
         }
 
         if (error.errors.imageUrl) {
-            errors.imageUrl = error.errors.imageUrl.message;
+            errors += error.errors.imageUrl.message + " ";
         }
 
         return errors;

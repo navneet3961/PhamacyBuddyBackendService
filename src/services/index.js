@@ -3,4 +3,5 @@ module.exports = {
     UserService: require("./user-service"),
     CartService: require("./cart-service"),
     AddressService: require("./address-service"),
+    OrderService: require("./order-service"),
 }

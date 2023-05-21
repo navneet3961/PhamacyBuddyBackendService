@@ -4,17 +4,17 @@ const { AppError, ValidationError } = require("../utils/index");
 
 class UserRepository {
     #findErrorAttributes(error) {
-        let errors = {};
+        let errors = "";
         if (error.errors.name) {
-            errors.name = error.errors.name.message;
+            errors += error.errors.name.message + " ";
         }
 
         if (error.errors.email) {
-            errors.email = error.errors.email.message;
+            errors += error.errors.email.message + " ";
         }
 
         if (error.errors.password) {
-            errors.password = error.errors.password.message;
+            errors += error.errors.password.message + " ";
         }
 
         return errors;
@@ -86,7 +86,7 @@ class UserRepository {
 
     async getByEmail(userEmail) {
         try {
-            const obj = await User.findOne({ email: userEmail });
+            const obj = await User.findOne({ email: userEmail }).populate({ path: 'addresses' });
 
             if (!obj) {
                 throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
@@ -113,7 +113,7 @@ class UserRepository {
 
     async update(userId, data) {
         try {
-            const obj = await User.findByIdAndUpdate(userId, data, { runValidators: true, new: true });
+            const obj = await User.findByIdAndUpdate(userId, data, { runValidators: true, new: true }).populate({ path: 'addresses' });
             if (!obj) {
                 throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
             }

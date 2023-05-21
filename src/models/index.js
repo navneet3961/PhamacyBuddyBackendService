@@ -3,4 +3,5 @@ module.exports = {
     User: require("./user"),
     Cart: require("./cart"),
     Address: require("./address"),
+    Order: require("./order"),
 }
