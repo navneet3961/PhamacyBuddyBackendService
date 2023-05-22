@@ -4,13 +4,16 @@ const orderService = new OrderService();
 
 const create = async (req, res) => {
     try {
+        console.log(req.body);
         const response = await orderService.create(req.body);
+        console.log(response);
         return res.status(201).json({
             status: true,
             data: response,
             message: "Order Created Succesfully"
         });
     } catch (error) {
+        console.log(error);
         return res.status(error.statusCode).json({
             status: false,
             name: error.name,

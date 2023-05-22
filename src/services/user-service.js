@@ -113,7 +113,7 @@ class UserService {
             if (data.name) { requiredData.name = data.name; }
             if (data.email) { requiredData.email = data.email; }
             if (data.password) { requiredData.password = data.password; }
-            if (data.isBlocked) { requiredData.stock = data.stock; }
+            if (data.isBlocked) { requiredData.isBlocked = data.isBlocked; }
 
             const obj = await this.userRepository.update(userId, requiredData);
             const token = jwt.sign({ email: obj.email, id: obj.id, isAdmin: obj.isAdmin, cart: obj.cart }, JWTKEY);

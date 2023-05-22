@@ -32,9 +32,9 @@ class OrderRepository {
         return errors;
     }
 
-    async create(items, totalCost, address, phone) {
+    async create(details, items, totalCost, address, phone) {
         try {
-            const order = await Order.create({ items, totalCost, address, phone });
+            const order = await Order.create({ details, items, totalCost, address, phone });
 
             return this.get(order.id);
         } catch (error) {

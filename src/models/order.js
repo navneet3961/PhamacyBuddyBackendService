@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
+    details: {
+        type: String,
+        required: true,
+        default: "Order",
+    },
     items: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Item",
@@ -30,6 +35,11 @@ const orderSchema = new mongoose.Schema({
         type: String,
         enum: ["CONFIRMED", "CANCELLED", "SHIPPED", "DELIVERED", "RETURN IN PROCESS", "RETURNED"],
         default: "CONFIRMED",
+    },
+    orderedDate: {
+        type: Number,
+        required: true,
+        default: new Date().getTime(),
     },
     deliveredDate: {
         type: Number,

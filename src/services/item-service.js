@@ -92,7 +92,7 @@ class ItemService {
             if (data.name) { requiredData.name = data.name; }
             if (data.description) { requiredData.description = data.description; }
             if (data.price) { requiredData.price = data.price; }
-            if (data.quantity) { requiredData.quantity = data.quantity; }
+            if (data.quantity || data.quantity == 0) { requiredData.quantity = data.quantity; }
             if (data.imageUrl) { requiredData.imageUrl = data.imageUrl; }
 
             const obj = await this.itemRepository.update(itemId, requiredData);

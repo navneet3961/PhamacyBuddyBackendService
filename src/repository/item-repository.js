@@ -98,6 +98,7 @@ class ItemRepository {
 
     async update(itemId, data) {
         try {
+            console.log(data);
             const obj = await Item.findByIdAndUpdate(itemId, data, { runValidators: true, new: true });
             if (!obj) {
                 throw new AppError("ClientError", "Item not found", "Invalid data sent in the request");
