@@ -23,7 +23,6 @@ class OrderService {
 
             session.startTransaction();
 
-
             for (let i = 0; i < items.length; i++) {
                 let item = await this.itemRepository.get(items[i]);
 
@@ -95,9 +94,21 @@ class OrderService {
         }
     }
 
+    async getAll(status) {
+        try {
+            const order = await this.orderRepository.getAll(status);
+            return order;
+        } catch (error) {
+            console.log("In Service Layer Name ", error.name);
+            console.log(error);
+
+            throw new ServiceError();
+        }
+    }
+
     async update(orderId, data) {
         try {
-            const order = await this.orderRepository.update(orderId, data.status);
+            const order = data.status == 2 ? await this.orderRepository.update(orderId, { status: data.status, deliveredDate: new Date().getTime() }) : await this.orderRepository.update(orderId, { status: data.status });
             return order;
         } catch (error) {
             console.log("In Service Layer Name ", error.name);

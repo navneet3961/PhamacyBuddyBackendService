@@ -52,15 +52,12 @@ class ItemService {
 
     async getAll(data) {
         try {
+            const objs = await this.itemRepository.getAll();
+
             if (data.name) {
-                const NAME = replaceTrimLower(data.name);
-                const objs = await this.itemRepository.getAll();
-
-                if (!data.name) {
-                    return objs;
-                }
-
                 let result = [];
+
+                const NAME = replaceTrimLower(data.name);
 
                 objs.forEach((obj) => {
                     if (obj.name.toLowerCase().includes(NAME)) {
@@ -75,8 +72,31 @@ class ItemService {
                 return result;
             }
 
-            const obj = await this.itemRepository.getAll();
-            return obj;
+            if (data.inStock) {
+                let result = [];
+
+                if (data.inStock == 1) {
+                    objs.forEach((obj) => {
+                        if (obj.quantity > 0) {
+                            result.push(obj);
+                        }
+                    })
+                } else {
+                    objs.forEach((obj) => {
+                        if (obj.quantity == 0) {
+                            result.push(obj);
+                        }
+                    })
+                }
+
+                if (result.length == 0) {
+                    throw new AppError("ClientError", "No items found", "Invalid name");
+                }
+
+                return result;
+            }
+
+            return objs;
 
         } catch (error) {
             if (error.name == "ClientError")

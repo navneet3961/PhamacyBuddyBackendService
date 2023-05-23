@@ -83,14 +83,21 @@ class OrderRepository {
         }
     }
 
-    async update(orderId, STATUS) {
+    async getAll(status) {
         try {
-            let order;
-            if (STATUS == "DELIVERED")
-                order = await Order.findByIdAndUpdate(orderId, { status: STATUS, deliveryDate: new Date.getTime() }, { runValidators: true, new: true });
-            else
-                order = await Order.findByIdAndUpdate(orderId, { status: STATUS }, { runValidators: true, new: true });
+            if (status) return await Order.find({ status });
 
+            return await Order.find();
+        } catch (error) {
+            console.log("Name ", error.name);
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async update(orderId, data) {
+        try {
+            const order = await Order.findByIdAndUpdate(orderId, data, { runValidators: true, new: true });
             return order;
         } catch (error) {
             console.log("Name ", error.name);

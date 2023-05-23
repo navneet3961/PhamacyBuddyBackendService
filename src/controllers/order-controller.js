@@ -4,9 +4,7 @@ const orderService = new OrderService();
 
 const create = async (req, res) => {
     try {
-        console.log(req.body);
         const response = await orderService.create(req.body);
-        console.log(response);
         return res.status(201).json({
             status: true,
             data: response,
@@ -58,6 +56,24 @@ const get = async (req, res) => {
     }
 }
 
+const getAll = async (req, res) => {
+    try {
+        const response = await orderService.getAll(req.query.status);
+        return res.status(200).json({
+            status: true,
+            data: response,
+            message: "Order found"
+        });
+    } catch (error) {
+        return res.status(error.statusCode).json({
+            status: false,
+            name: error.name,
+            message: error.message,
+            explanation: error.explanation,
+        });
+    }
+}
+
 const update = async (req, res) => {
     try {
         const response = await orderService.update(req.params.id, req.body);
@@ -80,5 +96,6 @@ module.exports = {
     create,
     destroy,
     get,
+    getAll,
     update,
 }
