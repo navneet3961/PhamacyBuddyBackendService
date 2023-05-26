@@ -158,7 +158,7 @@ class UserService {
             const obj = await this.userRepository.getByEmail(email);
 
             if (obj.isBlocked) {
-                throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
+                throw new AppError("ClientError", "Invalid password or email", "Invalid data sent in the request");
             }
 
             const encryptedPassword = obj.password;

@@ -3,6 +3,9 @@ const User = require("../models/user");
 const { AppError, ValidationError } = require("../utils/index");
 
 class UserRepository {
+    constructor() {
+        this.cartRepository = new CartRepository();
+    }
     #findErrorAttributes(error) {
         let errors = "";
         if (error.errors.name) {
@@ -20,18 +23,21 @@ class UserRepository {
         return errors;
     }
 
-    async #addCartToUser(user) {
-        const cartRepository = new CartRepository();
-        const cart = await cartRepository.create();
-
-        return await this.update(user._id, { "cart": cart._id });
-    }
-
     async create(data) {
+        let cart;
         try {
-            const obj = await User.create(data);
-            return await this.#addCartToUser(obj);
+            cart = await this.cartRepository.create();
+
+            data["cart"] = cart._id;
+
+            const user = await User.create(data);
+            return user;
         } catch (error) {
+
+            if (cart) {
+                this.cartRepository.delete(cart._id);
+            }
+
             console.log("Name ", error.name);
             console.log(error);
             if (error.name == "ValidationError") {
@@ -89,7 +95,7 @@ class UserRepository {
             const obj = await User.findOne({ email: userEmail }).populate({ path: 'addresses' });
 
             if (!obj) {
-                throw new AppError("ClientError", "User not found", "Invalid data sent in the request");
+                throw new AppError("ClientError", "Invalid password or email", "Invalid data sent in the request");
             }
 
             return obj;

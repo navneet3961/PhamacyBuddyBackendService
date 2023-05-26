@@ -18,7 +18,7 @@ class ItemRepository {
         }
 
         if (error.errors.description) {
-            errors += error.errors.description.messag + " ";
+            errors += error.errors.description.message + " ";
         }
 
         if (error.errors.quantity) {

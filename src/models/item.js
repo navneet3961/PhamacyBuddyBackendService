@@ -17,7 +17,6 @@ const itemSchema = new mongoose.Schema({
         required: [true, "Description is required"],
         lowercase: true,
         trim: true,
-        maxLength: [250, "Description cannot be more than 250 characters"],
     },
     imageUrl: {
         type: String,
